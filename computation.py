@@ -17,7 +17,7 @@ from data import open_convert_and_aggregate
 ##########################################
 
 def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], industry: str,
-                       n_pred: int) -> tuple[list[int], list[int]]:
+                       n_pred: int) -> tuple[list[datetime.date], list[int]]:
     """ Convert industry's data into a tuple of x-coords and y-coords, filtered to include n_pred
     data points.
 
@@ -44,6 +44,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], indus
 
 def diff_month(d1: datetime.date, d2: datetime.date) -> int:
     """
+    Helper function for dict_to_x_y_coords.
+
     Return the number of months between d1 and d2.
 
     >>> diff_month(datetime.date(2020, 2, 1), datetime.date(2019, 2, 1))
@@ -58,14 +60,14 @@ def regress(x_y_coords: tuple[list[int], list[int]]) -> tuple[float, float]:
     """Take x_y_coords and return coefficients of the line of best fit (y = a * x + b)
     as (a, b).
 
-    >>> coefficients = regress([1, 2, 3], [2, 4, 6])
+    >>> coefficients = regress(([0, 1, 2], [0, 2, 4]))
     >>> math.isclose(round(coefficients[0], 4), 2)
     True
     >>> math.isclose(round(coefficients[1], 4), 0)
     True
     """
     model = LinearRegression()
-    x_coords = np.array(x_y_coords[0]).reshape(-1, 1)
+    x_coords = np.arange(len(x_y_coords[1])).reshape(-1, 1)
     y_coords = np.array(x_y_coords[1])
 
     # Train model
