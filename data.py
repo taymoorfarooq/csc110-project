@@ -172,7 +172,7 @@ def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, i
     Return a dictionary mapping the name of the economic sector
     (Primary/Secondary/Tertiary/Quaternary) to the aggregated
     sum of GDP values per industry in the respective sector.
-    Input the dictionary from helper function 5.
+    Input the dictionary from helper function 4.
 
     Preconditions:
         - len(combined_dict) != 0
