@@ -14,9 +14,11 @@ import math
 # Computation: Outputting Coefficients of Line of Best Fit
 ##########################################
 
-def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], industry: str) -> \
-        (tuple[int, int]):
-    """ Convert data into the x coords and y coords associated with the specified industry.
+def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], industry: str,
+                       n_pred: int) -> (tuple[int, int]):
+    """ Convert data into the x coords and y coords associated with the specified industry,
+    filtered to include n_pred data points
+    .
     The first int in the returned tuple corresponds with the x-coords.
 
     data in format: dict[str*industry*, list[tuple[tuple[int*year*, int*month*]], int*gdp*]]]
@@ -24,6 +26,10 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], indus
     x-coords: year
     y-coords: gdp
     """
+    n_pred = min(128, len(data[industry]))  # compatible also with a small sample of the data
+    COVID_START_MONTH_COUNT = ...
+    # Multiple list element indexing: lst[<start>:<end + 1>]
+    x_y_coords = data[industry][COVID_START_MONTH_COUNT - n_pred:COVID_START_MONTH_COUNT + 1]
 
 
 def regress(x_coords: list[int], y_coords: list[int]) -> tuple[float, float]:
