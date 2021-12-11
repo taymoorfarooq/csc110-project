@@ -16,7 +16,7 @@ from data import open_convert_and_aggregate
 # Computation: Outputting Coefficients of Line of Best Fit
 ##########################################
 
-def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], industry: str,
+def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], sector: str,
                        n_pred: int) -> tuple[list[datetime.date], list[int]]:
     """ Convert industry's data into a tuple of x-coords and y-coords, filtered to include n_pred
     data points.
@@ -30,16 +30,16 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], indus
     >>> dict_to_x_y_coords(data, 'Primary Sector', 5)
 
     """
-    n_pred = min(128, len(data[industry]))  # compatible also with a small sample of the data
+    n_pred = min(128, len(data[sector]))  # compatible also with a small sample of the data
     # COVID_START_MONTH_COUNT = data[industry].index(((2020, 3), ...))  # archived implementation
 
     # index 0:
-    data_first_month = datetime.date(data[industry][0][0][0], data[industry][0][0][1], 1)
+    data_first_month = datetime.date(data[sector][0][0][0], data[sector][0][0][1], 1)
     pred_last_month = datetime.date(2020, 2, 1)
     # index 0 + (data_first_month - pred_last_month)
     pred_last_month_index = diff_month(data_first_month, pred_last_month)
     # Multiple list element indexing: lst[<start>:<end + 1>]
-    x_y_coords = data[industry][pred_last_month_index - n_pred:pred_last_month_index + 1]
+    x_y_coords = data[sector][pred_last_month_index - n_pred:pred_last_month_index + 1]
 
 
 def diff_month(d1: datetime.date, d2: datetime.date) -> int:
