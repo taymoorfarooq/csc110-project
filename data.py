@@ -107,53 +107,19 @@ def list_to_dict(list_so_far: list) -> dict[str, list[tuple[tuple[int, int], int
 ##########################################
 
 
-def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, int], int]]]:
+def open_convert_and_aggregate(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
-    Return a dictionary mapping the name of the economic sector
-    (Primary/Secondary/Tertiary/Quaternary) to the aggregated
-    sum of GDP values per industry in the respective sector.
-    Input the dictionary from helper function: categorize_4_sectors
-
+    Opens and converts the file into a dictionary mapping the industry name to
+    the GDP per month, then sorts each industry into an economic sector
+    (Primary/Secondary/Tertiary/Quaternary). Aggregates GDP values per industry in
+    each sector
+    
     Preconditions:
-        - len(combined_dict) != 0
+        - filename != ''
 
-    >>> aggregate_4sectors(categorize_4_sectors(open_and_convert('samp1.csv')))
+    >>> open_convert_and_aggregate('samp1.csv')
     """
-    primary_keys = list(combined_dict['Primary'].keys())
-    secondary_keys = list(combined_dict['Secondary'].keys())
-    tertiary_keys = list(combined_dict['Tertiary'].keys())
-    quaternary_keys = list(combined_dict['Quaternary'].keys())
-
-    year_month_tuples = [combined_dict['Primary'][primary_keys[0]][j][0] for j in range(0, len(
-        combined_dict['Primary'][primary_keys[0]]))]
-
-    primary_sums = []
-    secondary_sums = []
-    tertiary_sums = []
-    quaternary_sums = []
-
-    ag_primary_data = []
-    ag_secondary_data = []
-    ag_tertiary_data = []
-    ag_quaternary_data = []
-
-    for i in range(0, len(combined_dict['Primary'][primary_keys[0]])):
-        primary_sums = primary_sums + \
-            [sum((combined_dict['Primary'][y][i][1]) for y in primary_keys)]
-        secondary_sums = secondary_sums + \
-            [sum((combined_dict['Secondary'][y][i][1]) for y in secondary_keys)]
-        tertiary_sums = tertiary_sums + \
-            [sum((combined_dict['Tertiary'][y][i][1]) for y in tertiary_keys)]
-        quaternary_sums = quaternary_sums + \
-            [sum((combined_dict['Quaternary'][y][i][1]) for y in quaternary_keys)]
-
-        ag_primary_data = ag_primary_data + [(year_month_tuples[i], primary_sums[i])]
-        ag_secondary_data = ag_secondary_data + [(year_month_tuples[i], secondary_sums[i])]
-        ag_tertiary_data = ag_tertiary_data + [(year_month_tuples[i], tertiary_sums[i])]
-        ag_quaternary_data = ag_quaternary_data + [(year_month_tuples[i], quaternary_sums[i])]
-
-    return {'Primary': ag_primary_data, 'Secondary': ag_secondary_data,
-            'Tertiary': ag_tertiary_data, 'Quaternary': ag_quaternary_data}
+    return aggregate_4sectors(categorize_4_sectors(open_and_convert(filename)))
 
 
 def categorize_4_sectors(dct: dict) -> dict[str, dict]:
@@ -197,6 +163,55 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
 
     return {'Primary': primary_dict, 'Secondary': secondary_dict,
             'Tertiary': tertiary_dict, 'Quaternary': quaternary_dict}
+
+
+def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, int], int]]]:
+    """
+    Helper Function 6:
+
+    Return a dictionary mapping the name of the economic sector
+    (Primary/Secondary/Tertiary/Quaternary) to the aggregated
+    sum of GDP values per industry in the respective sector.
+    Input the dictionary from helper function 5.
+
+    Preconditions:
+        - len(combined_dict) != 0
+    """
+    primary_keys = list(combined_dict['Primary'].keys())
+    secondary_keys = list(combined_dict['Secondary'].keys())
+    tertiary_keys = list(combined_dict['Tertiary'].keys())
+    quaternary_keys = list(combined_dict['Quaternary'].keys())
+
+    year_month_tuples = [combined_dict['Primary'][primary_keys[0]][j][0] for j in range(0, len(
+        combined_dict['Primary'][primary_keys[0]]))]
+
+    primary_sums = []
+    secondary_sums = []
+    tertiary_sums = []
+    quaternary_sums = []
+
+    ag_primary_data = []
+    ag_secondary_data = []
+    ag_tertiary_data = []
+    ag_quaternary_data = []
+
+    for i in range(0, len(combined_dict['Primary'][primary_keys[0]])):
+        primary_sums = primary_sums + \
+            [sum((combined_dict['Primary'][y][i][1]) for y in primary_keys)]
+        secondary_sums = secondary_sums + \
+            [sum((combined_dict['Secondary'][y][i][1]) for y in secondary_keys)]
+        tertiary_sums = tertiary_sums + \
+            [sum((combined_dict['Tertiary'][y][i][1]) for y in tertiary_keys)]
+        quaternary_sums = quaternary_sums + \
+            [sum((combined_dict['Quaternary'][y][i][1]) for y in quaternary_keys)]
+
+        ag_primary_data = ag_primary_data + [(year_month_tuples[i], primary_sums[i])]
+        ag_secondary_data = ag_secondary_data + [(year_month_tuples[i], secondary_sums[i])]
+        ag_tertiary_data = ag_tertiary_data + [(year_month_tuples[i], tertiary_sums[i])]
+        ag_quaternary_data = ag_quaternary_data + [(year_month_tuples[i], quaternary_sums[i])]
+
+    return {'Primary Sector': ag_primary_data, 'Secondary Sector': ag_secondary_data,
+            'Tertiary Sector': ag_tertiary_data, 'Quaternary Sector': ag_quaternary_data}
 
 
 python_ta.check_all(config={
