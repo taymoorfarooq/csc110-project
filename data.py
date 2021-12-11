@@ -152,8 +152,8 @@ def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, i
         ag_tertiary_data = ag_tertiary_data + [(year_month_tuples[i], tertiary_sums[i])]
         ag_quaternary_data = ag_quaternary_data + [(year_month_tuples[i], quaternary_sums[i])]
 
-    return {'Primary Sector': ag_primary_data, 'Secondary Sector': ag_secondary_data,
-            'Tertiary Sector': ag_tertiary_data, 'Quaternary Sector': ag_quaternary_data}
+    return {'Primary': ag_primary_data, 'Secondary': ag_secondary_data,
+            'Tertiary': ag_tertiary_data, 'Quaternary': ag_quaternary_data}
 
 
 def categorize_4_sectors(dct: dict) -> dict[str, dict]:
