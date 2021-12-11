@@ -167,7 +167,7 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
 
 def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
-    Helper Function 6:
+    Helper Function 5:
 
     Return a dictionary mapping the name of the economic sector
     (Primary/Secondary/Tertiary/Quaternary) to the aggregated
