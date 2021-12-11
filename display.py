@@ -6,10 +6,9 @@ This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Kl
 # NOTE TO RUN, INSTALL PANDAS TO INTERPRETER
 # File > Settings > Python Interpreter > press the + button > search 'pandas' > install
 
+from dataclasses import dataclass
 import pandas
 import plotly.express as px
-import python_ta
-from dataclasses import dataclass
 
 
 @dataclass
@@ -23,9 +22,11 @@ class Sector:
       - expected: GDP values calculated from line of best fit based off pre-pandemic values and date
 
     Representation Invariants:
-      - name != ''
-      - all dates are valid
-      - TODO?
+      - self.name != ''
+      - all(1 <= point[0][1] <= 12 for point in self.actual)
+      - all(1 <= point[0][1] <= 12 for point in self.expected)
+      - all(point[1] >= 0 for point in self.actual)
+      - all(point[1] >= 0 for point in self.expected)
 
     """
     name: str
@@ -33,8 +34,16 @@ class Sector:
     expected: list[tuple[tuple[int, int], int]]
 
 
+def create_sector(data: dict[str, list[tuple[tuple[int, int], int]]], equation: _) -> Sector:
+    """Create an instance of a Sector dataclass using data from dataset and equations derived 
+    from the Computation Module"""
+    TODO: implement create_sector
+        
+        
 def graph_sectors(sectors: list[Sector]) -> None:
-    """TODO: docstring
+    """Displays a line graph of a list of sectors using Plotly.
+    Each sector is shown as a different colour with the actual data being a solid line 
+    and expected points being shown with a dashed line.
 
     >>> s1 = Sector('Sector1', [((2020, 1), 4), ((2020, 2), 5), ((2020, 3), 3), ((2020, 4), 4), \
     ((2020, 5), 6)], [((2020, 1), 4), ((2020, 2), 5), ((2020, 3), 2), ((2020, 4), 3)])
@@ -67,4 +76,15 @@ def graph_sectors(sectors: list[Sector]) -> None:
     graph.show()
 
 
-# TODO: pythonTA stuff
+if __name__ == '__main__':
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['python_ta.contracts', 'math', 'pandas', 'plotly.express', 'dataclass'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import doctest
+    doctest.testmod()
+
