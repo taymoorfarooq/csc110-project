@@ -144,7 +144,7 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float, interce
     """ Find deviations of actual data points from predicted data points from actual GDP values
 
     Calculate deviations of data[sector][73] (Feb 2020), data[sector][74] (March 2020) and
-    data[sector][75] (April 2020)
+    data[sector][75] (April 2020), usuing samp1.csv data
     """
     lst_so_far = []
 
