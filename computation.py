@@ -125,19 +125,34 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 # Computation: Predicting GDP using line of best fit and finding deviation to actual values
 ##########################################
 
-def predict_gdp() -> ...:
-    """ Predict gdp using regress values
 
-
-    """
-
-
-def add_predict_gdp() -> ...:
+def add_predict_gdp(data: dict[str, list[tuple[tuple[int, int], int]]]) -> ...:
     """ Add predicted GDP for a specific industry to master dict (derived in data.py) so that it can
     be displayed
-
-
+    
+    INCOMPLETE
     """
+    # determine index of Feb 2020 in list
+  
+    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of Feb 2020
+    
+    
+    for sector in data:
+        x_y_coords = dict_to_x_y_coords(data, sector)
+        model_coefficients = regress(x_y_coords)
+        for j in range(covid_start_index, covid_start_index + 3):
+            predicted_gdp = x_y_coords[0][j] * model_coefficients[0] + model_coefficients[1]
+        
+
+
+def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
+    """Helper Function
+    determine index of Feb 2020 in list
+    """
+    for i in range(0, len(data)):
+        if data[i][0] == (2020, 2):
+            return i
+
 
 
 def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float, intercept: float) -> list[float]:
@@ -147,8 +162,9 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float, interce
     data[sector][75] (April 2020), usuing samp1.csv data
     """
     lst_so_far = []
+    covid_start = determine_index_of_covid(data)
 
-    for i in range(73, 76):
+    for i in range(covid_start, covid_start + 3):
         projected_value = slope * i + intercept
         actual_value = data[i][1]
         dev = projected_value - actual_value
@@ -161,7 +177,7 @@ def calculate_rmsd(data: list[tuple[tuple[int, int], int]], slope: float, interc
 
     RMSD is a statistic that measures accuracy of a regression model
     """
-    num_of_datapoints = 72
+    num_of_datapoints = determine_index_of_covid(data) - 1
     sum_of_residuals_sq_so_far = 0
 
     for i in range(0, num_of_datapoints + 1):
