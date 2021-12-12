@@ -161,6 +161,14 @@ def calculate_rmsd(data: list[tuple[tuple[int, int], int]], slope: float, interc
 
     RMSD is a statistic that measures accuracy of a regression model
     """
+    num_of_datapoints = 72
+    sum_of_residuals_sq_so_far = 0
+
+    for i in range(0, num_of_datapoints + 1):
+        residual_sq = (data[i][1] - slope * i + intercept) ** 2
+        sum_of_residuals_sq_so_far += residual_sq
+
+    return math.sqrt(sum_of_residuals_sq_so_far / (num_of_datapoints - 2))
 
 
 if __name__ == '__main__':
