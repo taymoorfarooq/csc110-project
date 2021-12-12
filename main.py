@@ -28,15 +28,15 @@ def run_program(file: str = 'samp1.csv') -> None:
 
     graph_sectors(sectors)
 
-    if __name__ == '__main__':
-        import python_ta
+if __name__ == '__main__':
+    import python_ta
 
-        python_ta.check_all(config={
-            'extra-imports': ['python_ta.contracts'],
-            'max-line-length': 100,
-            'disable': ['R1705', 'C0200']
-        })
+    python_ta.check_all(config={
+        'extra-imports': ['python_ta.contracts'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
 
-        import doctest
+    import doctest
 
-        doctest.testmod()
+    doctest.testmod()
