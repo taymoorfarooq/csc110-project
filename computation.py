@@ -140,9 +140,26 @@ def add_predict_gdp() -> ...:
     """
 
 
-def calculate_dev() -> ...:
-    """ Find the deviation between pre-pandemic projections and the actual GDP value
-    
+def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float, intercept: float) -> list[float]:
+    """ Find deviations of actual data points from predicted data points from actual GDP values
+
+    Calculate deviations of data[sector][73] (Feb 2020), data[sector][74] (March 2020) and
+    data[sector][75] (April 2020)
+    """
+    lst_so_far = []
+
+    for i in range(73, 76):
+        projected_value = slope * i + intercept
+        actual_value = data[i][1]
+        dev = projected_value - actual_value
+        lst_so_far.append(dev)
+    return lst_so_far
+
+
+def calculate_rmsd(data: list[tuple[tuple[int, int], int]], slope: float, intercept: float) -> float:
+    """ Find deviations of residuals for regression model, aka, root mean square deviation (RMSD)
+
+    RMSD is a statistic that measures accuracy of a regression model
     """
 
 
