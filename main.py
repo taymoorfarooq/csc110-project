@@ -6,6 +6,7 @@ This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Kl
 
 from data import open_convert_and_aggregate
 from computation import run_computations
+from display import Sector, graph_sectors
 
 
 def run_program(file: str = 'samp1.csv') -> None:
@@ -17,3 +18,11 @@ def run_program(file: str = 'samp1.csv') -> None:
     data = open_convert_and_aggregate(file)
 
     data_points = run_computations(data, 5)
+
+    # ACCUMULATOR sectors: the running list of Sector objects
+    sectors = []
+    sector_names = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
+    for sector_name in sector_names:
+        sectors.append(Sector(name=sector_name, actual= data_points[sector_name]..., expected=...))
+
+    graph_sectors(sectors)

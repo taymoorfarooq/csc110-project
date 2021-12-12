@@ -16,7 +16,7 @@ from data import open_convert_and_aggregate
 ##########################################
 
 def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred: int) \
-        -> dict[str, tuple[list[int], list[int], list[float]]]:
+        -> dict[str, tuple[list[tuple[int, int]], list[int], list[int], list[float]]]:
     """Compute and display for each sector
     """
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
