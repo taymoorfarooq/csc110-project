@@ -4,7 +4,6 @@ Computation Module for the final project (CSC110 at the University of Toronto)
 This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Klinck.
 """
 
-import python_ta
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import math
@@ -100,9 +99,16 @@ def calculate_dev() -> ...:
     """
 
 
-python_ta.check_all(config={
-    'extra-imports': ['csv'],  # the names (strs) of imported modules
-    'allowed-io': ['file_to_list'],  # the names (strs) of functions that call print/open/input
-    'max-line-length': 100,
-    'disable': ['R1705', 'C0200']
-})
+if __name__ == '__main__':
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['python_ta.contracts', 'numpy', 'sklearn', 'math', 'dataclass',
+                          'datetime'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import doctest
+
+    doctest.testmod()
