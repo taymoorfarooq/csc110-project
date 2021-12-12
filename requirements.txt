@@ -1,1 +1,13 @@
+# CSC110 Final Project: Python libraries
 
+# Computational tools
+numpy
+sklearn
+
+# Data visualization
+plotly
+pandas
+
+# Testing and code checking
+pytest
+python-ta

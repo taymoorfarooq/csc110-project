@@ -4,7 +4,7 @@ Computation Module for the final project (CSC110 at the University of Toronto)
 This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Klinck.
 """
 
-# import python_ta
+import python_ta
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import math
@@ -98,3 +98,11 @@ def calculate_dev() -> ...:
     """ Find the deviation between pre-pandemic projections and the actual GDP value
     
     """
+
+
+python_ta.check_all(config={
+    'extra-imports': ['csv'],  # the names (strs) of imported modules
+    'allowed-io': ['file_to_list'],  # the names (strs) of functions that call print/open/input
+    'max-line-length': 100,
+    'disable': ['R1705', 'C0200']
+})
