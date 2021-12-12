@@ -23,6 +23,20 @@ def run_program(file: str = 'samp1.csv') -> None:
     sectors = []
     sector_names = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
     for sector_name in sector_names:
-        sectors.append(Sector(name=sector_name, actual= data_points[sector_name]..., expected=...))
+        sectors.append(Sector(name=sector_name, actual=data_points[sector_name][0],
+                              expected=data_points[sector_name][1]))
 
     graph_sectors(sectors)
+
+    if __name__ == '__main__':
+        import python_ta
+
+        python_ta.check_all(config={
+            'extra-imports': ['python_ta.contracts'],
+            'max-line-length': 100,
+            'disable': ['R1705', 'C0200']
+        })
+
+        import doctest
+
+        doctest.testmod()
