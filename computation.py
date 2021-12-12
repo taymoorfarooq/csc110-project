@@ -17,7 +17,7 @@ from data import open_convert_and_aggregate
 ##########################################
 
 def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], sector: str,
-                       n_pred: int) -> tuple[list[datetime.date], list[int]]:
+                       n_pred: int) -> tuple[list[tuple[int, int]], list[int]]:
     """ Convert industry's data into a tuple of x-coords and y-coords, filtered to include n_pred
     data points.
 
@@ -30,14 +30,17 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     >>> dict_to_x_y_coords(data, 'Primary Sector', 5)
 
     """
+    # 1) Calculating number of data points to include in prediction
     n_pred = min(128, len(data[sector]))  # compatible also with a small sample of the data
-    # COVID_START_MONTH_COUNT = data[industry].index(((2020, 3), ...))  # archived implementation
 
+    # 2) Calculating the index of February 2020, the final data point for prediction
     # index 0:
     data_first_month = datetime.date(data[sector][0][0][0], data[sector][0][0][1], 1)
     pred_last_month = datetime.date(2020, 2, 1)
     # index 0 + (data_first_month - pred_last_month)
     pred_last_month_index = diff_month(data_first_month, pred_last_month)
+
+    # 3) Filtering the list to include n_pred data points
     # Multiple list element indexing: lst[<start>:<end + 1>]
     x_y_coords = data[sector][pred_last_month_index - n_pred:pred_last_month_index + 1]
 
@@ -56,7 +59,7 @@ def diff_month(d1: datetime.date, d2: datetime.date) -> int:
     return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 
-def regress(x_y_coords: tuple[list[int], list[int]]) -> tuple[float, float]:
+def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float, float]:
     """Take x_y_coords and return coefficients of the line of best fit (y = a * x + b)
     as (a, b).
 
