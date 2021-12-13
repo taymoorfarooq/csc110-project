@@ -111,7 +111,7 @@ def list_to_dict(list_so_far: list) -> dict[str, list[tuple[tuple[int, int], int
     output_dict = {}
     dates = list_so_far[11]
 
-    month_tuples = [month_to_num(x) for x in dates[1:len(dates)]]
+    month_tuples = [month_to_num(date) for date in dates[1:len(dates)]]
     industry_list = [x[0] for x in list_so_far[13:len(list_so_far) - 11]]
 
     date_gdp = [[(month_tuples[i - 1], int(list_so_far[x][i].replace(',', '')))
@@ -143,6 +143,8 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
     >>> categorize_4_sectors(open_and_convert('samp1.csv'))
     """
     industry_list = list(dct.keys())
+    
+    #  Industry Identification Codes:
     primary_codes = ['[11]', '[21]']
     secondary_codes = ['[22]', '[23]', '[31-33]']
     tertiary_codes = ['[41]', '[44-45]', '[48-49]', '[52]', '[53]', '[54]', '[55]', '[56]',
@@ -153,19 +155,19 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
     tertiary_dict = {}
     quaternary_dict = {}
 
-    for y in industry_list:
+    for industry in industry_list:
         for p in primary_codes:
-            if p in y:
-                primary_dict[y] = dct[y]
+            if p in industry:
+                primary_dict[industry] = dct[industry]
         for s in secondary_codes:
-            if s in y:
-                secondary_dict[y] = dct[y]
+            if s in industry:
+                secondary_dict[industry] = dct[industry]
         for t in tertiary_codes:
-            if t in y:
-                tertiary_dict[y] = dct[y]
+            if t in industry:
+                tertiary_dict[industry] = dct[industry]
         for q in quaternary_codes:
-            if q in y:
-                quaternary_dict[y] = dct[y]
+            if q in industry:
+                quaternary_dict[industry] = dct[industry]
 
     return {'Primary': primary_dict, 'Secondary': secondary_dict,
             'Tertiary': tertiary_dict, 'Quaternary': quaternary_dict}
