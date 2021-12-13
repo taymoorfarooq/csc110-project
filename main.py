@@ -6,7 +6,7 @@ This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Kl
 
 from data import open_convert_and_aggregate
 from computation import run_computations
-from display import Sector, graph_sectors  # , graph_changes
+from display import Sector, graph_sectors, graph_changes
 
 
 def run_program(file: str = 'samp1.csv') -> None:
