@@ -24,6 +24,8 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
     values (rounded to the nearest integer); and a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer).
     """
+    dict_so_far = {}
+
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
     for sector in sectors:
         x_y_coords = dict_to_x_y_coords(data, sector)
@@ -39,6 +41,9 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
         # x_y_coords[0][0]
         lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
         lst_w_actual_values = actual_gdp_values(data[sector])
+        dict_so_far[sector] = (lst_w_actual_values, lst_w_predicted_values, deviations)
+    
+    return dict_so_far
 
 
 ##########################################
