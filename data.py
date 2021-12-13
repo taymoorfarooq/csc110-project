@@ -13,7 +13,7 @@ import csv
 
 def open_and_convert(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
-    Opens and converts the dataset file into a dictionary mapping each industry name to
+    Opens and converts the dataset file into a dictionary mapping each industry name
     to year-month tuples and their respective GDP values.
 
     Preconditions:
