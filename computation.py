@@ -97,7 +97,15 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 
 
 def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
-    """Returns list containing actual GDP values with dates going up to May 2020"""
+    """Returns list containing actual GDP values with dates going up to May 2020
+
+    Preconditions:
+    - The tuple values in data in accordance with ((year, month), GDP)
+    - data != []
+    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+    - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
+    - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
+    """
     covid_start_index = determine_index_of_covid(data)
 
     lst_so_far = []
@@ -110,6 +118,11 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
                        intercept: float) -> list[tuple[tuple[int, int], int]]:
     """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a
     list
+
+    Preconditions:
+    - The tuple values in data in accordance with ((year, month), GDP)
+    - data != []
+    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
     pred_data = []
 
@@ -126,6 +139,11 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
 def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
     """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
+
+    Preconditions:
+    - The tuple values in data in accordance with ((year, month), GDP)
+    - data != []
+    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
@@ -140,6 +158,11 @@ def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int
 def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     """Helper Function
     Determine index of March 2020 in list
+
+    Preconditions:
+    - The tuple values in data in accordance with ((year, month), GDP)
+    - data != []
+    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
     for i in range(0, len(data)):
         if data[i][0] == (2020, 3):
@@ -152,6 +175,13 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     """ Return a dictionary of
     sector mapped to a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer)
+
+    Preconditions:
+    - The tuple values in data in accordance with ((year, month), GDP)
+    - data != []
+    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+    - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
+    - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
     """
     lst_so_far = []
     covid_start_index = determine_index_of_covid(data)
