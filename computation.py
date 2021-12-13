@@ -20,6 +20,16 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
     list of dates and expected values (rounded to the nearest integer); and a list of dates and
     deviations between the actual and expected values (rounded to the nearest integer).
 
+    Preconditions:
+        - len(data) != 0  # input dict is non-empty
+        - all(len(sector_name) != 0 for sector_name in data.keys())  # sector names are non-empty
+        - all(len(data[sector_name]) != 0 for sector_name in data.keys())  # Each sector's
+        list of coordinates is non-empty; Note: non-empty lists of coordinates may not be strict
+        enough
+        - all(1 <= data[sector_name][i][0][1] <= 12 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # Months are between 1 and 12
+        - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # GDP values are non-negative
     """
     index_of_covid = determine_index_of_covid(data['Primary Sector'])
 
@@ -57,6 +67,18 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     data in format: dict[str*industry*, list[tuple[tuple[int*year*, int*month*]], int*gdp*]]]
     x-coords: year
     y-coords: gdp
+
+    Preconditions:
+        - len(data) != 0  # input dict is non-empty
+        - all(len(sector_name) != 0 for sector_name in data.keys())  # sector names are non-empty
+        - all(len(data[sector_name]) != 0 for sector_name in data.keys())  # Each sector's
+        list of coordinates is non-empty; Note: non-empty lists of coordinates may not be strict
+        enough
+        - all(1 <= data[sector_name][i][0][1] <= 12 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # Months are between 1 and 12
+        - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # GDP values are non-negative
+        - len(sector) != 0
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
@@ -71,6 +93,10 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
 def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float, float]:
     """Take x_y_coords and return coefficients of the line of best fit (y = a * x + b)
     as (a, b).
+
+    Preconditions:
+        - len(x_y_coords[0]) != 0
+        - len(x_y_coords[0]) == len(x_y_coords[1])
     """
     model = linear_model.LinearRegression()
     x_coords = np.arange(len(x_y_coords[0])).reshape(-1, 1)
