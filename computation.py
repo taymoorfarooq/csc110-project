@@ -30,9 +30,6 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
         # x_y_coords[1]: actual GDP values used for prediction
         slope, intercept = regress(x_y_coords)  # for line of best fit
         deviations = calculate_dev(data[sector], slope, intercept)
-        # TODO: change dict_to_x_y_coords to only convert dict to x_y_coords and add a filtering
-        #  function (calculate_dev will receive x_y_coords as input while regression receive
-        #  filtered x_y_coords as input)
 
 
 ##########################################
