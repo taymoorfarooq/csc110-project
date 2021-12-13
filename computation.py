@@ -36,6 +36,7 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
         deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
         # account for the first date used for coefficient determination in regress, which is
         # x_y_coords[0][0]
+        lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
 
 
 ##########################################
