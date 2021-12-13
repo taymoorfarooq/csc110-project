@@ -79,6 +79,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
         - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
         sector_name in data.keys())  # GDP values are non-negative
         - len(sector) != 0
+
+    >>> data = ...
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
@@ -124,11 +126,13 @@ def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tup
     """Returns list containing actual GDP values with dates going up to May 2020
 
     Preconditions:
-    - The tuple values in data in accordance with ((year, month), GDP)
-    - data != []
-    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
-    - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
-    - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
+        - all(len(data) != 0
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        # Months are between 1 and 12
+        - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
+        - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
     """
     covid_start_index = determine_index_of_covid(data)
 
@@ -142,11 +146,15 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
                        intercept: float) -> list[tuple[tuple[int, int], int]]:
     """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a
     list
-
+    
     Preconditions:
-    - The tuple values in data in accordance with ((year, month), GDP)
-    - data != []
-    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - all(len(data) != 0
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        # Months are between 1 and 12
+        - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
+        - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
     """
     pred_data = filter_data(data)
 
@@ -163,11 +171,10 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
 def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
     """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
-
+    
     Preconditions:
-    - The tuple values in data in accordance with ((year, month), GDP)
-    - data != []
-    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - all(len(data) != 0
+        - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
@@ -182,11 +189,12 @@ def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int
 def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     """Helper Function
     Determine index of March 2020 in list
-
     Preconditions:
-    - The tuple values in data in accordance with ((year, month), GDP)
-    - data != []
-    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - all(len(data) != 0
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        # Months are between 1 and 12
+        - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
+        - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
     for i in range(0, len(data)):
         if data[i][0] == (2020, 3):
@@ -199,13 +207,15 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     """ Return a dictionary of
     sector mapped to a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer)
-
+    
     Preconditions:
-    - The tuple values in data in accordance with ((year, month), GDP)
-    - data != []
-    - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
-    - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
-    - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
+        - all(len(data) != 0
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        # Months are between 1 and 12
+        - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
+        - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 4)) for i in range(0, len(data)))
+        - any((data[i][0] == (2020, 5)) for i in range(0, len(data)))
     """
     lst_so_far = []
     covid_start_index = determine_index_of_covid(data)
@@ -226,7 +236,6 @@ if __name__ == '__main__':
         'extra-imports': ['python_ta.contracts', 'numpy', 'sklearn', 'math', 'datetime'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']},
-        output='pyta_report.html'
     )
 
     import doctest
