@@ -6,8 +6,9 @@ This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Kl
 
 import csv
 
+
 ##########################################
-# Data Wrangling: Converting to Dictionary
+# Dataset Conversion Functions:
 ##########################################
 
 
@@ -24,12 +25,32 @@ def open_and_convert(filename: str) -> dict[str, list[tuple[tuple[int, int], int
     return list_to_dict(file_to_list(filename))
 
 
+def open_convert_and_aggregate(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
+    """
+    Opens and converts the file into a dictionary mapping the industry name to
+    the GDP per month, then sorts each industry into an economic sector
+    (Primary/Secondary/Tertiary/Quaternary). Aggregates GDP values per industry in
+    each sector
+
+    Preconditions:
+        - filename != ''
+
+    >>> open_convert_and_aggregate('samp1.csv')
+    """
+    return aggregate_4sectors(categorize_4_sectors(open_and_convert(filename)))
+
+
+##########################################
+# Data Wrangling: Helper Functions (Converting dataset to dictionary)
+##########################################
+
+
 def month_to_num(monthyear: str) -> tuple[int, int]:
     """
     Helper Function 1:
 
     Return a tuple with the tuple[int, int] equivalent of the input date string
-    written in format: 'Year, Month'
+    written in format: (Year, Month)
 
     Preconditions:
         - monthyear != ''
@@ -58,7 +79,8 @@ def file_to_list(filename: str) -> list[list[str]]:
     """
     Helper Function 2:
 
-    Return a list of lists converting the raw sample data in CSV format
+    Convert the raw sample data into a usable list of lists
+    (obtained from a .csv file)
 
     Preconditions:
         - filename != ''
@@ -79,11 +101,12 @@ def list_to_dict(list_so_far: list) -> dict[str, list[tuple[tuple[int, int], int
     """
     Helper Function 3:
 
-    Convert the input list into a dictionary
+    Convert the input list into a dictionary mapping each
+    industry name to a list containing a tuple of each
+    year-month pair mapped to its respective GDP value
 
     Preconditions:
         - len(list_so_far) > 0
-
     """
     output_dict = {}
     dates = list_so_far[11]
@@ -102,33 +125,17 @@ def list_to_dict(list_so_far: list) -> dict[str, list[tuple[tuple[int, int], int
 
 
 ##########################################
-# Data Wrangling: Categorizing Data
+# Data Wrangling: Helper Functions (Industry Categorization)
 ##########################################
-
-
-def open_convert_and_aggregate(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
-    """
-    Opens and converts the file into a dictionary mapping the industry name to
-    the GDP per month, then sorts each industry into an economic sector
-    (Primary/Secondary/Tertiary/Quaternary). Aggregates GDP values per industry in
-    each sector
-    
-    Preconditions:
-        - filename != ''
-
-    >>> open_convert_and_aggregate('samp1.csv')
-    """
-    return aggregate_4sectors(categorize_4_sectors(open_and_convert(filename)))
 
 
 def categorize_4_sectors(dct: dict) -> dict[str, dict]:
     """
     Helper Function 4:
 
-    Return a dictionary mapping the economic sector name
+    Return a dictionary mapping each economic sector's name
     (Primary/Secondary/Tertiary/Secondary) to the industries in them
     without aggregation
-
 
     Preconditions:
         len(dct) != 0
@@ -168,7 +175,7 @@ def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, i
     """
     Helper Function 5:
 
-    Return a dictionary mapping the name of the economic sector
+    Return a dictionary mapping the name of each economic sector
     (Primary/Secondary/Tertiary/Quaternary) to the aggregated
     sum of GDP values per industry in the respective sector.
     Input the dictionary from helper function 4.
