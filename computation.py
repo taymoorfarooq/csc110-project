@@ -12,7 +12,7 @@ from data import open_convert_and_aggregate
 
 
 ##########################################
-# Computation: Main function taking input from Data Module and returning output for Display Module
+# 1. Main function taking input from Data Module and returning output for Display Module
 ##########################################
 
 def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred: int) \
@@ -36,7 +36,7 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
 
 
 ##########################################
-# Computation: Separating and filtering x and y coordinates (for a sector)
+# 2. Separating and filtering x and y coordinates (for a sector)
 ##########################################
 
 def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], sector: str) \
@@ -58,51 +58,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     return x_coords, y_coords
 
 
-def filter_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], sector: str,
-                      n_pred: int) -> tuple[list[tuple[int, int]], list[int]]:
-    """ Convert industry's data into a tuple of x-coords and y-coords, filtered to include n_pred
-    data points.
-
-    data in format: dict[str*industry*, list[tuple[tuple[int*year*, int*month*]], int*gdp*]]]
-
-    x-coords: year
-    y-coords: gdp
-
-    >>> data = open_convert_and_aggregate('samp1.csv')  # From Jan 2012 to Sep 2021
-    >>> dict_to_x_y_coords(data, 'Primary Sector', 5)
-
-    """
-    # 1) Calculating number of data points to include in prediction
-    n_pred = min(128, len(data[sector]))  # compatible also with a small sample of the data
-
-    # 2) Calculating the index of February 2020, the final data point for prediction
-    # index 0:
-    data_first_month = datetime.date(data[sector][0][0][0], data[sector][0][0][1], 1)
-    pred_last_month = datetime.date(2020, 2, 1)
-    # index 0 + (data_first_month - pred_last_month)
-    pred_last_month_index = diff_month(data_first_month, pred_last_month)
-
-    # 3) Filtering the list to include n_pred data points
-    # Multiple list element indexing: lst[<start>:<end + 1>]
-    x_y_coords = data[sector][pred_last_month_index - n_pred:pred_last_month_index + 1]
-
-
-def diff_month(d1: datetime.date, d2: datetime.date) -> int:
-    """
-    Helper function 1:
-
-    Return the number of months between d1 and d2.
-
-    >>> diff_month(datetime.date(2020, 2, 1), datetime.date(2019, 2, 1))
-    12
-    >>> diff_month(datetime.date(2020, 2, 1), datetime.date(2020, 3, 1))
-    -1
-    """
-    return (d1.year - d2.year) * 12 + d1.month - d2.month
-
-
 ##########################################
-# Computation: Calculating coefficients of line of best fit
+# 3. Calculating coefficients of line of best fit
 ##########################################
 
 def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float, float]:
@@ -126,7 +83,7 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 
 
 ##########################################
-# Computation: Predicting GDP using line of best fit and finding deviation to actual values
+# 4. Predicting GDP using line of best fit and finding deviation to actual values
 ##########################################
 
 
