@@ -79,6 +79,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
         - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
         sector_name in data.keys())  # GDP values are non-negative
         - len(sector) != 0
+
+    >>> data = ...
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
@@ -97,6 +99,12 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
     Preconditions:
         - len(x_y_coords[0]) != 0
         - len(x_y_coords[0]) == len(x_y_coords[1])
+
+    >>> coefficients = regress(([(2019, 12), (2020, 1), (2020, 2)], [0, 2, 4]))
+    >>> round(coefficients[0])
+    2
+    >>> round(coefficients[1])
+    0
     """
     model = linear_model.LinearRegression()
     x_coords = np.arange(len(x_y_coords[0])).reshape(-1, 1)
