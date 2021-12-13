@@ -25,11 +25,13 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
     """
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
     for sector in sectors:
-        x_y_coords = dict_to_x_y_coords(data=data, sector=sector, n_pred=5)
+        x_y_coords = dict_to_x_y_coords(data, sector)
         # x_y_coords[0]: dates
         # x_y_coords[1]: actual GDP values used for prediction
-        slope, intercept = regress(x_y_coords)  # for line of best fit
-        deviations = calculate_dev(data[sector], slope, intercept)
+        slope, intercept = regress(x_y_coords)
+        deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
+        # account for the first date used for coefficient determination in regress, which is
+        # x_y_coords[0][0]
 
 
 ##########################################
