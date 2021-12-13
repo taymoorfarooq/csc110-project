@@ -19,6 +19,17 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
     sector mapped to a list of dates and actual values; a list of dates and expected
     values (rounded to the nearest integer); and a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer).
+    
+    Preconditions:
+        - len(data) != 0  # input dict is non-empty
+        - all(sector_name != '' for sector_name in data.keys())  # sector names are non-empty
+        - all(len(data[sector_name]) != 0 for sector_name in data.keys())  # Each sector's
+        list of coordinates is non-empty; Note: non-empty lists of coordinates may not be strict
+        enough
+        - all(1 <= data[sector_name][i][0][1] <= 12 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # Months are between 1 and 12
+        - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
+        sector_name in data.keys())  # GDP values are non-negative
     """
     index_of_covid = determine_index_of_covid(data['Primary Sector'])
 
