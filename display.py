@@ -69,10 +69,11 @@ def graph_sectors(sectors: list[Sector]) -> None:
             gdp.append(sector.expected[i][1])
             style.append('Expected')
 
-    data = {'Date': date, 'Sector': sector_name, 'GDP': gdp, 'Style': style}
+    data = {'Date': date, 'Sector': sector_name, 'GDP (x 1,000,000)': gdp, 'Style': style}
     df = pandas.DataFrame(data)
 
-    graph = px.line(df, x='Date', y='GDP', color='Sector', line_dash='Style')
+    graph = px.line(df, title='Monthly Canadian Expected GDP Values vs. Actual GDP Values (Categorized by Economic '
+                              'Sector)', x='Date', y='GDP (x 1,000,000)', color='Sector', line_dash='Style')
     graph.show()
 
 
