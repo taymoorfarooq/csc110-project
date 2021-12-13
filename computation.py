@@ -158,7 +158,7 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     for i in range(covid_start_index, covid_start_index + 3):
         projected_value = slope * i + intercept
         actual_value = data[i][1]
-        dev = actual_value - int(projected_value)
+        dev = actual_value - round(projected_value)
         date = data[i][0]
         lst_so_far.append((date, dev))
     return lst_so_far
