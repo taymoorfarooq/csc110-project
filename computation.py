@@ -3,9 +3,12 @@ Computation Module for the final project (CSC110 at the University of Toronto)
 This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Klinck.
 """
 
-from typing import Optional
-import sklearn
+from sklearn.linear_model import LinearRegression
 import numpy as np
+import math
+import datetime
+from data import open_convert_and_aggregate
+
 
 ##########################################
 # 1. Main function taking input from Data Module and returning output for Display Module
@@ -15,21 +18,9 @@ import numpy as np
 def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
         -> dict[str, tuple[list[tuple[tuple[int, int], int]], list[tuple[tuple[int, int], int]],
                            list[tuple[tuple[int, int], int]]]]:
-    """Given data and the number of points used in the prediction (n_pred), return a dictionary of
-    sector mapped to a list of dates and actual values; a list of dates and expected
-    values (rounded to the nearest integer); and a list of dates and deviations between the actual
-    and expected values (rounded to the nearest integer).
-    
-    Preconditions:
-        - len(data) != 0  # input dict is non-empty
-        - all(sector_name != '' for sector_name in data.keys())  # sector names are non-empty
-        - all(len(data[sector_name]) != 0 for sector_name in data.keys())  # Each sector's
-        list of coordinates is non-empty; Note: non-empty lists of coordinates may not be strict
-        enough
-        - all(1 <= data[sector_name][i][0][1] <= 12 for i in range(len(data[sector_name])) for
-        sector_name in data.keys())  # Months are between 1 and 12
-        - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
-        sector_name in data.keys())  # GDP values are non-negative
+    """ Given data, return a dictionary of sector mapped to a list of dates and actual values; a
+    list of dates and expected values (rounded to the nearest integer); and a list of dates and
+    deviations between the actual and expected values (rounded to the nearest integer).
     """
     index_of_covid = determine_index_of_covid(data['Primary Sector'])
 
@@ -47,11 +38,11 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
         # Note: slicing does not include end index (index_of_covid or (2020, 3))
 
         slope, intercept = regress(x_y_coords_for_prediction)
-        deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
-        # account for the first date used for coefficient determination in regress, which is
-        # x_y_coords[0][0]
-        lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
+
         lst_w_actual_values = actual_gdp_values(data[sector])
+        lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
+        deviations = calculate_dev(data[sector], slope, intercept)
+
         dict_so_far[sector] = (lst_w_actual_values, lst_w_predicted_values, deviations)
 
     return dict_so_far
@@ -67,6 +58,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     data in format: dict[str*industry*, list[tuple[tuple[int*year*, int*month*]], int*gdp*]]]
     x-coords: year
     y-coords: gdp
+    >>> data = open_convert_and_aggregate('samp1.csv')
+    >>> dict_to_x_y_coords(data, 'Primary Sector')
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
@@ -81,14 +74,13 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
 def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float, float]:
     """Take x_y_coords and return coefficients of the line of best fit (y = a * x + b)
     as (a, b).
-    >>> import math
     >>> coefficients = regress(([(2019, 12), (2020, 1), (2020, 2)], [0, 2, 4]))
     >>> math.isclose(round(coefficients[0], 4), 2)
     True
     >>> math.isclose(round(coefficients[1], 4), 0)
     True
     """
-    model = sklearn.linear_model.LinearRegression()
+    model = LinearRegression()
     x_coords = np.arange(len(x_y_coords[0])).reshape(-1, 1)
     y_coords = np.array(x_y_coords[1])
 
@@ -99,8 +91,7 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 
 
 ##########################################
-# 4. Predicting GDP using line of best fit and finding deviation to actual values and list
-# with actual values
+# 4. Predicting GDP using line of best fit and finding deviation to actual values and list with actual values
 ##########################################
 
 
@@ -116,18 +107,16 @@ def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tup
 
 def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
                        intercept: float) -> list[tuple[tuple[int, int], int]]:
-    """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a
-    list
-
+    """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a list
+    COMPLETE
     """
-    #  pred_data = filter_data(data)
-    pred_data = []
+    pred_data = filter_data(data)
 
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
 
     for i in range(covid_start_index, covid_start_index + 3):
-        predicted_gdp = round(slope * i + intercept)
+        predicted_gdp = int((i * round(slope, 3)) + round(intercept, 3))
         pred_data.append(((2020, 3 + (i - covid_start_index)), predicted_gdp))
 
     return pred_data
@@ -137,6 +126,7 @@ def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int
     """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
     """
+    lst_so_far = {}
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
 
@@ -147,14 +137,13 @@ def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int
     return lst_so_far
 
 
-def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> Optional[int]:
+def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     """Helper Function
     Determine index of March 2020 in list
     """
     for i in range(0, len(data)):
         if data[i][0] == (2020, 3):
             return i
-    return None
 
 
 def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
@@ -163,6 +152,7 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     sector mapped to a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer)
     """
+    dev_data = data
     lst_so_far = []
     covid_start_index = determine_index_of_covid(data)
 
@@ -179,10 +169,11 @@ if __name__ == '__main__':
     import python_ta
 
     python_ta.check_all(config={
-        'extra-imports': ['python_ta.contracts', 'numpy', 'sklearn', 'math'],
+        'extra-imports': ['python_ta.contracts', 'numpy', 'sklearn', 'math', 'datetime'],
         'max-line-length': 100,
-        'disable': ['R1705', 'C0200']
-    })
+        'disable': ['R1705', 'C0200']},
+        output='pyta_report.html'
+    )
 
     import doctest
 
