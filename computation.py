@@ -15,6 +15,7 @@ from data import open_convert_and_aggregate
 # 1. Main function taking input from Data Module and returning output for Display Module
 ##########################################
 
+
 def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred: int) \
         -> dict[str, tuple[list[tuple[tuple[int, int], int]], list[tuple[tuple[int, int], int]],
                            list[tuple[tuple[int, int], int]]]]:
@@ -37,6 +38,7 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
         # account for the first date used for coefficient determination in regress, which is
         # x_y_coords[0][0]
         lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
+        lst_w_actual_values = actual_gdp_values(data[sector])
 
 
 ##########################################
@@ -87,50 +89,51 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 
 
 ##########################################
-# 4. Predicting GDP using line of best fit and finding deviation to actual values
+# 4. Predicting GDP using line of best fit and finding deviation to actual values and list with actual values
 ##########################################
 
 
-def predict_gdp_values(data: dict[str, list[tuple[tuple[int, int], int]]]) -> dict[
-                                                                                str, list[tuple[tuple[int, int], int]]]:
-    """ Return a dictionary of
-    sector mapped to a list of dates and actual values; a list of dates and expected
-    values (rounded to the nearest integer); for all dates and values leading up to March 2020,
-    Predict values for March, April and May 2020 and add them to returned dict.
-    Returned dict does not have any values past the month May 2020.
+def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
+    """Returns list containing actual GDP values with dates going up to May 2020"""
+    covid_start_index = determine_index_of_covid(data)
+    
+    lst_so_far = []
+    for i in range(0, covid_start_index + 3):
+        lst_so_far.append(data[i])
+    return lst_so_far
+    
+
+def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
+                               intercept: float) -> list[tuple[tuple[int, int], int]]:
+    """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a list
 
     COMPLETE
     """
     pred_data = filter_data(data)
 
     # determine index of March 2020 in list
-    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of March 2020
+    covid_start_index = determine_index_of_covid(data)  # index of March 2020
 
-    # x_y_coords[0]: dates
-    for sector in data:
-        x_y_coords = dict_to_x_y_coords(data, sector)
-        model_coefficients = regress(x_y_coords)
-        for i in range(covid_start_index, covid_start_index + 3):
-            predicted_gdp = int((i * round(model_coefficients[0], 3)) + round(model_coefficients[1], 3))
-            pred_data[sector].append(((2020, 3 + (i - covid_start_index)), predicted_gdp))
+    for i in range(covid_start_index, covid_start_index + 3):
+        predicted_gdp = int((i * round(slope, 3)) + round(intercept, 3))
+        pred_data.append(((2020, 3 + (i - covid_start_index)), predicted_gdp))
 
     return pred_data
 
 
-def filter_data(data: dict[str, list[tuple[tuple[int, int], int]]]) -> dict[str, list[tuple[tuple[int, int], int]]]:
-    """ Helper Function for predict_gdp_values
+def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
+    """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
     """
-    dict_so_far = {}
+    lst_so_far = {}
     # determine index of March 2020 in list
-    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of March 2020
+    covid_start_index = determine_index_of_covid(data)  # index of March 2020
 
-    for sector in data:
-        dict_so_far[sector] = []
-        for i in range(0, covid_start_index):
-            dict_so_far[sector].append(data[sector][i])
+    lst_so_far = []
+    for i in range(0, covid_start_index):
+        lst_so_far.append(data[i])
 
-    return dict_so_far
+    return lst_so_far
 
 
 def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
@@ -152,27 +155,13 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     lst_so_far = []
     covid_start_index = determine_index_of_covid(data)
 
-    for i in range(0, covid_start_index + 3):
+    for i in range(covid_start_index, covid_start_index + 3):
         projected_value = slope * i + intercept
         actual_value = data[i][1]
         dev = abs(int(projected_value - actual_value))
         date = data[i][0]
         lst_so_far.append((date, dev))
     return lst_so_far
-
-
-def calculate_rmsd(data: list[tuple[tuple[int, int], int]], slope: float, intercept: float) -> float:
-    """ Find deviations of residuals for regression model, aka, root mean square deviation (RMSD)
-    RMSD is a statistic that measures accuracy of a regression model
-    """
-    num_of_datapoints = determine_index_of_covid(data) - 1
-    sum_of_residuals_sq_so_far = 0
-
-    for i in range(0, num_of_datapoints + 1):
-        residual_sq = (data[i][1] - slope * i + intercept) ** 2
-        sum_of_residuals_sq_so_far += residual_sq
-
-    return math.sqrt(sum_of_residuals_sq_so_far / (num_of_datapoints - 2))
 
 
 if __name__ == '__main__':
