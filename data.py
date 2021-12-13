@@ -1,6 +1,5 @@
 """
 Data Module for the final project (CSC110 at the University of Toronto)
-
 This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Klinck.
 """
 
