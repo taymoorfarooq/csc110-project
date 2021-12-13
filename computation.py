@@ -19,10 +19,9 @@ from data import open_convert_and_aggregate
 def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
         -> dict[str, tuple[list[tuple[tuple[int, int], int]], list[tuple[tuple[int, int], int]],
                            list[tuple[tuple[int, int], int]]]]:
-    """Given data and the number of points used in the prediction (n_pred), return a dictionary of
-    sector mapped to a list of dates and actual values; a list of dates and expected
-    values (rounded to the nearest integer); and a list of dates and deviations between the actual
-    and expected values (rounded to the nearest integer).
+    """ Given data, return a dictionary of sector mapped to a list of dates and actual values; a
+    list of dates and expected values (rounded to the nearest integer); and a list of dates and
+    deviations between the actual and expected values (rounded to the nearest integer).
     """
     index_of_covid = determine_index_of_covid(data['Primary Sector'])
 
@@ -40,11 +39,11 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
         # Note: slicing does not include end index (index_of_covid or (2020, 3))
 
         slope, intercept = regress(x_y_coords_for_prediction)
-        deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
-        # account for the first date used for coefficient determination in regress, which is
-        # x_y_coords[0][0]
-        lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
+
         lst_w_actual_values = actual_gdp_values(data[sector])
+        lst_w_predicted_values = predict_gdp_values(data[sector], slope, intercept)
+        deviations = calculate_dev(data[sector], slope, intercept)
+
         dict_so_far[sector] = (lst_w_actual_values, lst_w_predicted_values, deviations)
     
     return dict_so_far
