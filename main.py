@@ -17,7 +17,7 @@ def run_program(file: str = 'samp1.csv') -> None:
     """
     data = open_convert_and_aggregate(file)
 
-    data_points = run_computations(data, 5)
+    data_points = run_computations(data)
 
     # ACCUMULATOR sectors: the running list of Sector objects
     sectors = []

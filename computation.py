@@ -16,7 +16,7 @@ from data import open_convert_and_aggregate
 ##########################################
 
 
-def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred: int) \
+def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
         -> dict[str, tuple[list[tuple[tuple[int, int], int]], list[tuple[tuple[int, int], int]],
                            list[tuple[tuple[int, int], int]]]]:
     """Given data and the number of points used in the prediction (n_pred), return a dictionary of
