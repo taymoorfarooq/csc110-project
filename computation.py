@@ -3,11 +3,9 @@ Computation Module for the final project (CSC110 at the University of Toronto)
 This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Klinck.
 """
 
-from sklearn.linear_model import LinearRegression
+# from sklearn.linear_model import LinearRegression
+from sklearn import linear_model
 import numpy as np
-import math
-import datetime
-from data import open_convert_and_aggregate
 
 
 ##########################################
@@ -21,6 +19,7 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]]) \
     """ Given data, return a dictionary of sector mapped to a list of dates and actual values; a
     list of dates and expected values (rounded to the nearest integer); and a list of dates and
     deviations between the actual and expected values (rounded to the nearest integer).
+
     """
     index_of_covid = determine_index_of_covid(data['Primary Sector'])
 
@@ -58,8 +57,6 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     data in format: dict[str*industry*, list[tuple[tuple[int*year*, int*month*]], int*gdp*]]]
     x-coords: year
     y-coords: gdp
-    >>> data = open_convert_and_aggregate('samp1.csv')
-    >>> dict_to_x_y_coords(data, 'Primary Sector')
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
@@ -74,13 +71,8 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
 def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float, float]:
     """Take x_y_coords and return coefficients of the line of best fit (y = a * x + b)
     as (a, b).
-    >>> coefficients = regress(([(2019, 12), (2020, 1), (2020, 2)], [0, 2, 4]))
-    >>> math.isclose(round(coefficients[0], 4), 2)
-    True
-    >>> math.isclose(round(coefficients[1], 4), 0)
-    True
     """
-    model = LinearRegression()
+    model = linear_model.LinearRegression()
     x_coords = np.arange(len(x_y_coords[0])).reshape(-1, 1)
     y_coords = np.array(x_y_coords[1])
 
