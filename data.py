@@ -14,7 +14,8 @@ import csv
 
 def open_and_convert(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
-    Opens and converts the dataset into a dictionary
+    Opens and converts the dataset file into a dictionary mapping each industry name to
+    to year-month tuples and their respective GDP values.
 
     Preconditions:
         - filename != ''
@@ -27,10 +28,10 @@ def open_and_convert(filename: str) -> dict[str, list[tuple[tuple[int, int], int
 
 def open_convert_and_aggregate(filename: str) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
-    Opens and converts the file into a dictionary mapping the industry name to
-    the GDP per month, then sorts each industry into an economic sector
-    (Primary/Secondary/Tertiary/Quaternary). Aggregates GDP values per industry in
-    each sector
+    Opens and converts the dataset file into a dictionary mapping each industry name to
+    year-month tuples and their respective GDP value, then sorts each industry into an
+    economic sector (Primary/Secondary/Tertiary/Quaternary). The GDP values across all
+    industries per sector are then aggregated into one value.
 
     Preconditions:
         - filename != ''
