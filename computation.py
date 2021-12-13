@@ -79,8 +79,6 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
         - all(data[sector_name][i][1] >= 0 for i in range(len(data[sector_name])) for
         sector_name in data.keys())  # GDP values are non-negative
         - len(sector) != 0
-
-    >>> data = ...
     """
     x_coords = [data[sector][index][0] for index in range(len(data[sector]))]
     y_coords = [data[sector][index][1] for index in range(len(data[sector]))]
