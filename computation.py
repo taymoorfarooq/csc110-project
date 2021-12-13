@@ -23,19 +23,28 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
     values (rounded to the nearest integer); and a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer).
     """
+    index_of_covid = determine_index_of_covid(data['Primary Sector'])
+
+    # ACCUMULATOR: computed_data_so_far: the running dictionary of computed data for each sector
+    computed_data_so_far = {}
+
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
     for sector in sectors:
         x_y_coords = dict_to_x_y_coords(data, sector)
-        # x_y_coords: all coordinates in samp1.csv (i.e. from Jan 2014 to Sep 2021)
+        # x_y_coords: all coordinates in samp1.csv (i.e. from Jan 2014 to Aug 2021)
         # x_y_coords[0]: dates
-        # x_y_coords[1]: actual GDP values used for prediction
-        index_of_covid = determine_index_of_covid(data[sector])
+        # x_y_coords[1]: actual GDP values
+
         x_y_coords_for_prediction = (x_y_coords[0][:index_of_covid], x_y_coords[1][:index_of_covid])
-        # Note: slicing does not include end index (index_of_covid)
+        # Note: slicing does not include end index (index_of_covid or (2020, 3))
+
         slope, intercept = regress(x_y_coords_for_prediction)
-        deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
-        # account for the first date used for coefficient determination in regress, which is
-        # x_y_coords[0][0]
+
+        deviations = calculate_dev(data[sector], slope, intercept)
+
+        computed_data_so_far[sector] = ...
+
+    return computed_data_so_far
 
 
 ##########################################
@@ -51,7 +60,7 @@ def dict_to_x_y_coords(data: dict[str, list[tuple[tuple[int, int], int]]], secto
     x-coords: year
     y-coords: gdp
 
-    >>> data = open_convert_and_aggregate('samp1.csv')  # From Jan 2012 to Sep 2021
+    >>> data = open_convert_and_aggregate('samp1.csv')
     >>> dict_to_x_y_coords(data, 'Primary Sector')
 
     """
