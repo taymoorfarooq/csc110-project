@@ -26,9 +26,13 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
     for sector in sectors:
         x_y_coords = dict_to_x_y_coords(data, sector)
+        # x_y_coords: all coordinates in samp1.csv (i.e. from Jan 2014 to Sep 2021)
         # x_y_coords[0]: dates
         # x_y_coords[1]: actual GDP values used for prediction
-        slope, intercept = regress(x_y_coords)
+        index_of_covid = determine_index_of_covid(data[sector])
+        x_y_coords_for_prediction = (x_y_coords[0][:index_of_covid], x_y_coords[1][:index_of_covid])
+        # Note: slicing does not include end index (index_of_covid)
+        slope, intercept = regress(x_y_coords_for_prediction)
         deviations = calculate_dev(data[sector], slope, intercept)  # calculate_dev needs to
         # account for the first date used for coefficient determination in regress, which is
         # x_y_coords[0][0]
