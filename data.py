@@ -5,7 +5,6 @@ This file is Copyright (c) 2021 Xi Chen, Taymoor Farooq, Se-Eum Kim and Henry Kl
 """
 
 import csv
-import python_ta
 
 ##########################################
 # Data Wrangling: Converting to Dictionary
@@ -214,9 +213,16 @@ def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, i
             'Tertiary Sector': ag_tertiary_data, 'Quaternary Sector': ag_quaternary_data}
 
 
-python_ta.check_all(config={
-    'extra-imports': ['csv'],  # the names (strs) of imported modules
-    'allowed-io': ['file_to_list'],  # the names (strs) of functions that call print/open/input
-    'max-line-length': 100,
-    'disable': ['R1705', 'C0200']
-})
+if __name__ == '__main__':
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['csv'],
+        'allowed-io': ['file_to_list'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import doctest
+
+    doctest.testmod()
