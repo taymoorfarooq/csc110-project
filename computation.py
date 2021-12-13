@@ -91,7 +91,8 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 
 
 ##########################################
-# 4. Predicting GDP using line of best fit and finding deviation to actual values and list with actual values
+# 4. Predicting GDP using line of best fit and finding deviation to actual values and list
+# with actual values
 ##########################################
 
 
@@ -107,10 +108,10 @@ def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tup
 
 def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
                        intercept: float) -> list[tuple[tuple[int, int], int]]:
-    """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a list
-    COMPLETE
+    """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a
+    list
     """
-    pred_data = filter_data(data)
+    pred_data = []
 
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
@@ -126,7 +127,6 @@ def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int
     """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
     """
-    lst_so_far = {}
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
 
@@ -144,6 +144,7 @@ def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     for i in range(0, len(data)):
         if data[i][0] == (2020, 3):
             return i
+    return 0
 
 
 def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
@@ -152,7 +153,6 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     sector mapped to a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer)
     """
-    dev_data = data
     lst_so_far = []
     covid_start_index = determine_index_of_covid(data)
 
