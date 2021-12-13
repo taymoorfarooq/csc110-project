@@ -27,17 +27,12 @@ class Sector:
       - all(1 <= point[0][1] <= 12 for point in self.expected)
       - all(point[1] >= 0 for point in self.actual)
       - all(point[1] >= 0 for point in self.expected)
+      - all(point[0] in [p[0] for p in ac] for point in ex)
 
     """
     name: str
     actual: list[tuple[tuple[int, int], int]]
     expected: list[tuple[tuple[int, int], int]]
-
-
-# def create_sector(data: dict[str, list[tuple[tuple[int, int], int]]], equation: _) -> Sector:
-#     """Create an instance of a Sector dataclass using data from dataset and equations derived
-#     from the Computation Module"""
-#     TODO: implement create_sector
         
         
 def graph_sectors(sectors: list[Sector]) -> None:
@@ -63,11 +58,16 @@ def graph_sectors(sectors: list[Sector]) -> None:
             date.append(str(sector.actual[i][0]))
             gdp.append(sector.actual[i][1])
             style.append('Actual')
+            if sector.actual[i][0] in [point[0] for point in sector.expected]:
+                difference.append(sector.expected[i][1] - sector.actual[i][1])
+            else:
+                difference.append('N/A')
         for i in range(len(sector.expected)):
             sector_name.append(sector.name)
             date.append(str(sector.expected[i][0]))
             gdp.append(sector.expected[i][1])
             style.append('Expected')
+            difference.append(sector.expected[i][1] - sector.actual[i][1])
 
     data = {'Date': date, 'Sector': sector_name, 'GDP (x 1,000,000)': gdp, 'Style': style}
     df = pandas.DataFrame(data)
@@ -76,6 +76,42 @@ def graph_sectors(sectors: list[Sector]) -> None:
                               'Sector)', x='Date', y='GDP (x 1,000,000)', color='Sector', line_dash='Style')
     graph.show()
 
+    
+def graph_changes(sectors: list[Sector]) -> None:
+    """Displays a graph showing the differences in expected and actual GDP values for each sector
+    in sectors using Plotly
+    >>> s1 = Sector('Sector1', [((2020, 1), 4), ((2020, 2), 5), ((2020, 3), 3), ((2020, 4), 4), \
+    ((2020, 5), 6)], [((2020, 1), 4), ((2020, 2), 5), ((2020, 3), 2), ((2020, 4), 3)])
+    >>> s2 = Sector('Sector2', [((2020, 1), 8), ((2020, 2), 7), ((2020, 3), 8), ((2020, 4), 10), \
+    ((2020, 5), 9)], [((2020, 1), 8), ((2020, 2), 7), ((2020, 3), 6), ((2020, 4), 5)])
+    >>> graph_changes([s1, s2])
+    """
+    date = []
+    sector_name = []
+    difference = []
+
+    for sector in sectors:
+        for i in range(len(sector.actual)):
+            sector_name.append(sector.name)
+            date.append(str(sector.actual[i][0]))
+            if sector.actual[i][0] in [point[0] for point in sector.expected]:
+                difference.append(sector.expected[i][1] - sector.actual[i][1])
+            else:
+                difference.append('N/A')
+
+        for i in range(len(sector.expected)):
+            sector_name.append(sector.name)
+            date.append(str(sector.expected[i][0]))
+            difference.append(sector.expected[i][1] - sector.actual[i][1])
+
+    data = {'Date': date, 'Sector': sector_name, 'Difference in GDP (x 1,000,000)': difference}
+    df = pandas.DataFrame(data)
+
+    graph = px.line(df, title='The Difference Between Expected and Actual GDP Values '
+                              '(Categorized by Economic Sector)', x='Date',
+                    y='Difference in GDP (x 1,000,000)', color='Sector')
+    graph.show()
+    
 
 if __name__ == '__main__':
     import python_ta
