@@ -116,7 +116,7 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
     - data != []
     - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
     """
-    pred_data = []
+    pred_data = filter_data(data)
 
     # determine index of March 2020 in list
     covid_start_index = determine_index_of_covid(data)  # index of March 2020
