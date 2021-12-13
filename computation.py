@@ -24,6 +24,9 @@ def run_computations(data: dict[str, list[tuple[tuple[int, int], int]]], n_pred:
     values (rounded to the nearest integer); and a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer).
     """
+    index_of_covid = determine_index_of_covid(data['Primary Sector'])
+
+    # ACCUMULATOR: dict_so_far: the running dictionary of computed data for each sector
     dict_so_far = {}
 
     sectors = ['Primary Sector', 'Secondary Sector', 'Tertiary Sector', 'Quaternary Sector']
