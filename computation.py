@@ -90,33 +90,53 @@ def regress(x_y_coords: tuple[list[tuple[int, int]], list[int]]) -> tuple[float,
 ##########################################
 
 
-def add_predict_gdp(data: dict[str, list[tuple[tuple[int, int], int]]]) -> ...:
-    """ Add predicted GDP for a specific industry to master dict (derived in data.py) so that it can
-    be displayed
-    
-    INCOMPLETE
+def add_predict_gdp_values(data: dict[str, list[tuple[tuple[int, int], int]]]) -> dict[str, list[tuple[tuple[int, int], int]]]:
+    """ Return dict that contains the same values as the input list for all dates and values leading up to March 2020,
+    Predict values for March, April and May 2020 and add them to returned dict.
+    Returned dict does not have any values past the month May 2020. 
+
+    COMPLETE
     """
-    # determine index of Feb 2020 in list
-  
-    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of Feb 2020
-    
-    
+    pred_data = filter_data(data)
+
+    # determine index of March 2020 in list
+    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of March 2020
+
+    # x_y_coords[0]: dates
     for sector in data:
         x_y_coords = dict_to_x_y_coords(data, sector)
         model_coefficients = regress(x_y_coords)
-        for j in range(covid_start_index, covid_start_index + 3):
-            predicted_gdp = x_y_coords[0][j] * model_coefficients[0] + model_coefficients[1]
-        
+        for i in range(covid_start_index, covid_start_index + 3):
+            predicted_gdp = int((i * round(model_coefficients[0], 3)) + round(model_coefficients[1], 3))
+            pred_data[sector].append(((2020, 3 + i - covid_start_index), predicted_gdp))
+
+    return pred_data
+
+
+def filter_data(data: dict[str, list[tuple[tuple[int, int], int]]]) -> dict[str, list[tuple[tuple[int, int], int]]]:
+    """ Helper Function
+    Return dict containing values and dates associated to dates prior to covid
+
+    """
+    dict_so_far = {}
+    # determine index of March 2020 in list
+    covid_start_index = determine_index_of_covid(data['Primary Sector'])  # index of March 2020
+
+    for sector in data:
+        dict_so_far[sector] = []
+        for i in range(0, covid_start_index):
+            dict_so_far[sector].append(data[sector][i])
+
+    return dict_so_far
 
 
 def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     """Helper Function
-    determine index of Feb 2020 in list
+    determine index of March 2020 in list
     """
     for i in range(0, len(data)):
-        if data[i][0] == (2020, 2):
+        if data[i][0] == (2020, 3):
             return i
-
 
 
 def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float, intercept: float) -> list[float]:
