@@ -14,6 +14,9 @@ def run_program(file: str = 'samp1.csv') -> None:
     and displaying graphs.
 
     samp1.csv has dates from Jan 2014 to Sep 2021.
+
+    Preconditions:
+        - file != ''
     """
     data = open_convert_and_aggregate(file)
 
@@ -30,14 +33,16 @@ def run_program(file: str = 'samp1.csv') -> None:
 
 
 if __name__ == '__main__':
-    import python_ta
-
-    python_ta.check_all(config={
-        'extra-imports': ['python_ta.contracts'],
-        'max-line-length': 100,
-        'disable': ['R1705', 'C0200']
-    })
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
 
     import doctest
+    doctest.testmod(verbose=True)
 
-    doctest.testmod()
+    # import python_ta
+    # python_ta.check_all(config={
+    #     'extra-imports': ['python_ta.contracts'],
+    #     'max-line-length': 100,
+    #     'disable': ['R1705', 'C0200']
+    # })

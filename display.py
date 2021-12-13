@@ -34,10 +34,10 @@ class Sector:
     expected: list[tuple[tuple[int, int], int]]
 
 
-def create_sector(data: dict[str, list[tuple[tuple[int, int], int]]], equation: _) -> Sector:
-    """Create an instance of a Sector dataclass using data from dataset and equations derived 
-    from the Computation Module"""
-    TODO: implement create_sector
+# def create_sector(data: dict[str, list[tuple[tuple[int, int], int]]], equation: _) -> Sector:
+#     """Create an instance of a Sector dataclass using data from dataset and equations derived
+#     from the Computation Module"""
+#     TODO: implement create_sector
         
         
 def graph_sectors(sectors: list[Sector]) -> None:
