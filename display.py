@@ -99,9 +99,10 @@ def graph_changes(sectors: list[Sector]) -> None:
     data = {'Date': date, 'Sector': sector_name, 'Difference in GDP (in $)': difference}
     df = pandas.DataFrame(data)
 
-    graph = px.line(df, title='The Difference Between Expected and Actual GDP Values '
-                              '(Categorized by Economic Sector)', x='Date',
-                    y='Difference in GDP (in $)', color='Sector')
+    graph = px.line(df, title='Monthly Canadian Expected GDP Values vs. Actual GDP Values '
+                              '(Categorized by Economic Sector)', x='Date', 
+                    y='GDP (in $) (x 1,000,000)', color='Sector', line_dash='Style', 
+                    hover_data=['Difference in GDP (in $)(x 1,000,000)'])
     graph.show()
 
 
