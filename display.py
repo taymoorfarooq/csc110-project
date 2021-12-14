@@ -67,13 +67,14 @@ def graph_sectors(sectors: list[Sector]) -> None:
             style.append('Expected')
             difference.append(sector.expected[i][1] - sector.actual[i][1])
 
-    data = {'Date': date, 'Sector': sector_name, 'GDP (in $) (x 1,000,000)': gdp, 'Style': style,
+    data = {'Date': date, 'Sector': sector_name, 'GDP (in $)(x 1,000,000)': gdp, 'Style': style,
             'Difference in GDP (in $)': difference}
     df = pandas.DataFrame(data)
 
     graph = px.line(df, title='Monthly Canadian Expected GDP Values vs. Actual GDP Values '
-                    '(Categorized by Economic Sector)', x='Date', y='GDP (x 1,000,000)',
-                    color='Sector', line_dash='Style', hover_data=['Difference in GDP (in $)'])
+                              '(Categorized by Economic Sector)', x='Date',
+                    y='GDP (in $)(x 1,000,000)', color='Sector', line_dash='Style',
+                    hover_data=['Difference in GDP (in $)(x 1,000,000)'])
     graph.show()
 
 
