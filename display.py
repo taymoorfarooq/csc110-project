@@ -68,7 +68,7 @@ def graph_sectors(sectors: list[Sector]) -> None:
             difference.append(sector.expected[i][1] - sector.actual[i][1])
 
     data = {'Date': date, 'Sector': sector_name, 'GDP (in $)(x 1,000,000)': gdp, 'Style': style,
-            'Difference in GDP (in $)': difference}
+            'Difference in GDP (in $)(x 1,000,000)': difference}
     df = pandas.DataFrame(data)
 
     graph = px.line(df, title='Monthly Canadian Expected GDP Values vs. Actual GDP Values '
@@ -97,26 +97,26 @@ def graph_changes(sectors: list[Sector]) -> None:
             sector_name.append(sector.name)
             difference.append(sector.expected[-(3 - i)][1] - sector.actual[-(3 - i)][1])
 
-    data = {'Date': date, 'Sector': sector_name, 'Difference in GDP (in $)': difference}
+    data = {'Date': date, 'Sector': sector_name,
+            'Difference in GDP (in $)(x 1,000,000)': difference}
     df = pandas.DataFrame(data)
 
-    graph = px.line(df, title='Monthly Canadian Expected GDP Values vs. Actual GDP Values '
-                              '(Categorized by Economic Sector)', x='Date', 
-                    y='GDP (in $) (x 1,000,000)', color='Sector', line_dash='Style', 
-                    hover_data=['Difference in GDP (in $)(x 1,000,000)'])
+    graph = px.line(df, title='The Difference Between Expected and Actual GDP Values '
+                              '(Categorized by Economic Sector)', x='Date',
+                    y='Difference in GDP (in $)(x 1,000,000)', color='Sector')
     graph.show()
 
 
 if __name__ == '__main__':
     import python_ta
 
-    python_ta.check_all(config={
-        'extra-imports': ['python_ta.contracts', 'math', 'pandas', 'plotly.express', 'dataclass'],
-        'max-line-length': 100,
-        'disable': ['R1705', 'C0200']
-    })
+    # python_ta.check_all(config={
+    #     'extra-imports': ['python_ta.contracts', 'math', 'pandas', 'plotly.express', 'dataclass'],
+    #     'max-line-length': 100,
+    #     'disable': ['R1705', 'C0200']
+    # })
 
     import doctest
 
     doctest.testmod()
-
+    
