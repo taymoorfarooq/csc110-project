@@ -39,7 +39,7 @@ def open_convert_and_aggregate(filename: str) -> dict[str, list[tuple[tuple[int,
 
     >>> open_convert_and_aggregate('samp1.csv')
     """
-    return aggregate_4sectors(categorize_4_sectors(open_and_convert(filename)))
+    return aggregate_4_sectors(categorize_4_sectors(open_and_convert(filename)))
 
 
 ##########################################
@@ -175,7 +175,7 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
             'Tertiary': tertiary_dict, 'Quaternary': quaternary_dict}
 
 
-def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, int], int]]]:
+def aggregate_4_sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, int], int]]]:
     """
     Helper Function 5:
 
