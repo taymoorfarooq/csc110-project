@@ -225,12 +225,12 @@ def aggregate_4sectors(combined_dict: dict) -> dict[str, list[tuple[tuple[int, i
 if __name__ == '__main__':
     import python_ta
 
-    python_ta.check_all(config={
-        'extra-imports': ['csv'],
-        'allowed-io': ['file_to_list'],
-        'max-line-length': 100,
-        'disable': ['R1705', 'C0200']
-    })
+    # python_ta.check_all(config={
+        # 'extra-imports': ['csv'],
+        # 'allowed-io': ['file_to_list'],
+        # 'max-line-length': 100,
+        # 'disable': ['R1705', 'C0200']
+    # })
 
     import doctest
 
