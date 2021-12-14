@@ -30,7 +30,13 @@ Being able to distinguish between the two branches is necessary to deal with the
 
 It is also valuable to determine how each economic sector was affected. The four economic sectors that this project will investigate are: the primary (production) sector, the secondary sector (encompasses companies that contribute to producing a finished, usable product or are involved in construction), the tertiary (service) sector, and the quaternary sector (associated with either the intellectual or knowledge-based economy). Based on the results of this project, we will be able to identify which economic sectors were the most impacted by the COVID-19 pandemic.  
 
-\section{Datasets}
+\section{Dataset Description}
+
+The primary dataset we we have used for this project comes from the Statistics Canada Covid-19 statistics database and presents the Canadian Gross Domestic Product at seasonally adjusted prices across numerous different industries, ranging from Agriculture to IT, Media and beyond. This dataset consists of GDP values from August 1997 to August 2021, a range of around 22 years of pre-pandemic data and over a year of (post)-pandemic data. We downloaded the dataset to a .csv file (an option available on the Statistics Canada Website) which we have used as the main data source for the data wrangling, computations and visualizations performed by our program.
+
+\medskip
+
+The rows in this dataset present the GDP values per industry, and the columns present the respective date (in format: "Year Month", eg: "January 2014"). Each row is relevant to the functionality of the program, as it provides the GDP values per industry per date. The number of columns can be adjusted by the user of the program according to how many months of data they want (ie: if the user wants to see the impact of the pandemic from October 2019 to March 2020 inclusive, the dataset would have 6 columns). The next section elaborates upon the specific data wrangling operations performed by our program to adjust the csv file and make it usable in python.
 
 \section{Computational Overview }
 
