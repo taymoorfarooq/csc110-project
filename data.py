@@ -145,8 +145,9 @@ def categorize_4_sectors(dct: dict) -> dict[str, dict]:
     >>> categorize_4_sectors(open_and_convert('samp1.csv'))
     """
     industry_list = list(dct.keys())
-    
+
     #  Industry Identification Codes:
+
     primary_codes = ['[11]', '[21]']
     secondary_codes = ['[22]', '[23]', '[31-33]']
     tertiary_codes = ['[41]', '[44-45]', '[48-49]', '[52]', '[53]', '[54]', '[55]', '[56]',
