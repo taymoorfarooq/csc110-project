@@ -91,10 +91,10 @@ def graph_changes(sectors: list[Sector]) -> None:
     difference = []
 
     for sector in sectors:
-        for i in range(4):
-            date.append(str((2020, 2 + i)))
+        for i in range(3):
+            date.append(str((2020, 3 + i)))
             sector_name.append(sector.name)
-            difference.append(sector.expected[-(4 - i)][1] - sector.actual[-(4 - i)][1])
+            difference.append(sector.expected[-(3 - i)][1] - sector.actual[-(3 - i)][1])
 
     data = {'Date': date, 'Sector': sector_name, 'Difference in GDP (in $)': difference}
     df = pandas.DataFrame(data)
