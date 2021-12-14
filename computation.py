@@ -125,7 +125,7 @@ def actual_gdp_values(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tup
 
     Preconditions:
         - all(len(data) != 0
-        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data))
         # Months are between 1 and 12
         - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
         - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
@@ -144,10 +144,10 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
                        intercept: float) -> list[tuple[tuple[int, int], int]]:
     """Similar use pf predict_gpd_values, expect this function takes a list as input and returns a
     list
-    
+
     Preconditions:
         - all(len(data) != 0
-        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data))
         # Months are between 1 and 12
         - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
         - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
@@ -169,7 +169,7 @@ def predict_gdp_values(data: list[tuple[tuple[int, int], int]], slope: float,
 def filter_data(data: list[tuple[tuple[int, int], int]]) -> list[tuple[tuple[int, int], int]]:
     """ Helper Function for predict_gdp_values_to_list
     Return dict containing values and dates associated to dates prior to start of covid (March 2020)
-    
+
     Preconditions:
         - all(len(data) != 0
         - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
@@ -189,7 +189,7 @@ def determine_index_of_covid(data: list[tuple[tuple[int, int], int]]) -> int:
     Determine index of March 2020 in list
     Preconditions:
         - all(len(data) != 0
-        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data))
         # Months are between 1 and 12
         - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
         - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
@@ -205,10 +205,10 @@ def calculate_dev(data: list[tuple[tuple[int, int], int]], slope: float,
     """ Return a dictionary of
     sector mapped to a list of dates and deviations between the actual
     and expected values (rounded to the nearest integer)
-    
+
     Preconditions:
         - all(len(data) != 0
-        - all(1 <= data[i][0][1] <= 12 for i in range(len(data)) 
+        - all(1 <= data[i][0][1] <= 12 for i in range(len(data))
         # Months are between 1 and 12
         - all(data[i][1] >= 0 for i in range(len(data)) # GDP values are non-negative
         - any((data[i][0] == (2020, 3)) for i in range(0, len(data)))
