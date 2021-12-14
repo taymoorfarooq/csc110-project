@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     # import python_ta
     # python_ta.check_all(config={
-    #     'extra-imports': ['python_ta.contracts', 'data', 'computation', display],
+    #     'extra-imports': ['python_ta.contracts', 'data', 'computation', 'display'],
     #     'max-line-length': 100,
     #     'disable': ['R1705', 'C0200']
     # })
