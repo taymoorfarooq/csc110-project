@@ -105,6 +105,30 @@ def graph_changes(sectors: list[Sector]) -> None:
                               '(Categorized by Economic Sector)', x='Date',
                     y='Difference in GDP (in $)(x 1,000,000)', color='Sector')
     graph.show()
+    
+    
+def graph_percentage(sectors: list[Sector]) -> None:
+    """Displays a graph showing the percentage lost in expected and actual GDP values
+    for each sector in sectors using Plotly
+    """
+    date = []
+    sector_name = []
+    percents = []
+
+    for sector in sectors:
+        for i in range(3):
+            date.append(str((2020, 3 + i)))
+            sector_name.append(sector.name)
+            percents.append(100 - (sector.actual[-(3 - i)][1] / 
+                                     sector.expected[-(3 - i)][1] * 100))
+
+    data = {'Date': date, 'Sector': sector_name, 'Percentage lost in GDP': percents}
+    df = pandas.DataFrame(data)
+
+    graph = px.line(df, title='The Percentage Lost Between Expected and Actual GDP Values '
+                              '(Categorized by Economic Sector)', x='Date',
+                    y='Percentage lost in GDP', color='Sector')
+    graph.show()
 
 
 if __name__ == '__main__':
